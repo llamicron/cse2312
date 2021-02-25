@@ -14,7 +14,7 @@ int main() {
 
     uint32_t d, e, f;
     d = 100;
-    e = -200;
+    e = 200;
     f = addU32(d, e);
     printf("d + e = %d + %d = %d\n", d, e, f);
     
