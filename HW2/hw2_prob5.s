@@ -10,6 +10,7 @@
 .global isLessThanU16
 .global shiftLeftS32
 .global shiftU32
+.global isEqualS8
 
 .text
 
@@ -95,10 +96,16 @@ shiftU32:
 
     @ This means p is negative (i think)
     @ Shift right by p
-    SUB R2, R1, #0
-    MOVMI R0, R0, LSR R2
+    RSB R2, R1, #0
+    MOVMI R0, R0, ASR R2
 
     @ Otherwise shift left by p
     MOVPL R0, R0, LSL R1
 
+    BX LR
+
+isEqualS8:
+    CMP R0, R1
+    MOVNE R0, #0
+    MOVEQ R0, #1
     BX LR

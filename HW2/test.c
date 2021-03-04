@@ -13,7 +13,7 @@ extern bool isLessThanS8(int8_t x, int8_t y);
 extern bool isLessThanU16(uint16_t x, uint16_t y);
 extern uint32_t shiftLeftS32(int32_t x, uint8_t p);
 extern uint32_t shiftU32(uint32_t x, int8_t p);
-
+extern bool isEqualS8(int8_t x, int8_t y);
 
 void test_addS64()
 {
@@ -159,8 +159,6 @@ void test_shiftU32()
     // Right shifts, negative p
     uint32_t y = 256;
     assert(shiftU32(y, 0) == 256);
-    uint32_t result = shiftU32(y, -1);
-    printf("result: %d\n", result);
     assert(shiftU32(y, -1) == 128);
     assert(shiftU32(y, -2) == 64);
     assert(shiftU32(y, -3) == 32);
@@ -175,16 +173,31 @@ void test_shiftU32()
     printf("done.\n");
 }
 
+void test_isEqualS8()
+{
+    printf("Testing isEqualS8...");
+    int8_t a = 4;
+    int8_t b = 4;
+    assert(isEqualS8(a, b));
+    assert(isEqualS8(1, 1));
+    assert(isEqualS8(0, 0));
+    assert(isEqualS8(-4, -4));
+    assert(!isEqualS8(3, 8));
+    assert(!isEqualS8(0, 8));
+    printf("done.\n");
+}
+
 int main(void)
 {
-    // test_addS64();
-    // test_convertS16toS32();
-    // test_convertU8toS32();
-    // test_greaterS16();
-    // test_smallerU32();
-    // test_isLessThanS8();
-    // test_isLessThanU16();
-    // test_shiftLeftS32();
+    test_addS64();
+    test_convertS16toS32();
+    test_convertU8toS32();
+    test_greaterS16();
+    test_smallerU32();
+    test_isLessThanS8();
+    test_isLessThanU16();
+    test_shiftLeftS32();
     test_shiftU32();
+    test_isEqualS8();
     return EXIT_SUCCESS;
 }
