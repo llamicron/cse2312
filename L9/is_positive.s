@@ -32,3 +32,4 @@ isPositiveS32:
     MOVEQ R0, #0
     @ return 0 (false) if MI is set
     MOVMI R0, #0
+    BX LR
