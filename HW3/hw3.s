@@ -43,30 +43,27 @@ isStrEqual_end:
     BX LR
 
 
-
-
 @ Question 2b -----------------------------------------
 @ void strConcatenate(char strTo[], const char strFrom[]);
 @ R0 = strTo
 @ R1 = strFrom
-@ R2 = temp char
-@ R3 = new string
-@ No return value
 strConcatenate:
-    mov  r4, #6
-loop1:
-    ldrb r3, [r0], #1   @ Copy STRING1 to SRTRING3
-    strb r3, [r2], #1
-    subs r4, #1
-    bne  loop1
+    MOV R4, #0
+strConcatenate_len:             @ This gets the length of str1 -> R4
+    LDRSB R3, [R0, R4]
+    CMP R3, #0
+    BEQ strConcatenate_loop1
+    ADD R4, R4, #1
+    B strConcatenate_len
+strConcatenate_loop1:
+    LDRB R3, [R0], #1           @ Load char into R3, post increment R0 (str1)
+    STRB R3, [R2], #1           @ store char into R2 (str3), port increment R2 (str3)
+    SUBS R4, #1
+    BNE strConcatenate_loop1
 
-    mov  r4, #6
-loop2:
-    ldrb r3, [r1], #1   @ Copy STRING2 to STRING3
-    strb r3, [r2], #1
-    subs r4, #1
-    bne  loop2
-
-    @ done
-
-
+strConcatenate_loop2:
+    LDRB R3, [R1], #1           @ Load char into R3, post increment R1 (str2)
+    STRB R3, [R2], #1           @ store char into R2 (str3), port increment R2 (str3)
+    CMP R3, #0                  @ until we reach the end
+    BNE strConcatenate_loop2
+    BX LR
