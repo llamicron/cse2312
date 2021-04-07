@@ -1,6 +1,7 @@
 .global isStrEqual
 .global strConcatenate
 .global sumS32
+.global countAboveLimit
 
 
 .text
@@ -87,3 +88,32 @@ sumS32_loop:
     CMP R1, #0              @ check if there's any more
     BNE sumS32_loop         @ if so, loop again
     BX LR                   @ otherwise return
+
+
+
+
+
+@ Question 2d --------------------------------------
+@ uint32_t countAboveLimit(const int32_t x[], int32_t limit, uint32_t count);
+@ Returns the number of values in the array containing count entires that are > limit
+@ R0 = result
+@ R1 = limit
+@ R2 = count (array length) * 4
+@ R3 = x[0]
+@ R4 = loaded x[i] value
+@ I am a genius
+countAboveLimit:
+    PUSH {R4}
+    MOV R3, R0                  @ Move x[0] into R3
+    MOV R0, #0                  @ Move result into R0
+    MOV R2, R2, LSL #2          @ This multiplies R2 by 2^2 (4) so we can use it as an index
+countAboveLimit_loop:
+    SUB R2, R2, #4              @ Subtract 4 (sizeof(int32_t)) from the index
+    LDRSB R4, [R3, R2]          @ Load (right to left) the numbers in x[]
+    CMP R4, R1                  @ Compare to the limit
+    ADDPL R0, R0, #1            @ If it's above, then add 1 to R0
+    CMP R2, #0                  @ Compare the index to 0
+    BNE countAboveLimit_loop    @ If there's still more, loop again 
+countAboveLimit_end:            @ Otherwise return
+    POP {R4}
+    BX LR

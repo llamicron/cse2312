@@ -8,7 +8,7 @@
 // Question 2a
 extern bool isStrEqual(const char str1[], const char str2[]);
 void q2a() {
-    printf("2a) testing isStrEqual ... \t");
+    printf("2a) testing isStrEqual\t\t");
 
     char str1[] = "something";
     char str2[] = "something";
@@ -30,7 +30,7 @@ void q2b() {
     // char str2[] = "whatever";
     // char* result = strConcatenate(str1, str2);
     // printf("result = %s\n", result);
-    printf("2b) testing strConcatenate ... \t");
+    printf("2b) testing strConcatenate\t");
 
     char str1[13] = "first ";
     char str2[] = "second";
@@ -55,7 +55,7 @@ void q2b() {
 // Question 2c
 extern int32_t sumS32(const int32_t x[], uint32_t count);
 void q2c() {
-    printf("2c) testing sumS32 ... \t\t");
+    printf("2c) testing sumS32\t\t");
     uint32_t length = 5;
     int32_t nums[] = {10, 20, 30, 40, 50};
     int32_t sum = sumS32(nums, length);
@@ -63,10 +63,26 @@ void q2c() {
     printf("passed.\n");
 }
 
+// Question 2d
+extern uint32_t countAboveLimit(const int32_t x[], int32_t limit, uint32_t count);
+// Returns the number of values in the array containing count entires that are > limit
+void q2d() {
+    printf("2d) testing countAboveLimit\t");
+
+    int32_t x[] = {10, 15, 20, 25, 30, 60, 5};
+    int32_t limit = 17;
+    uint32_t count = 7;
+
+    uint32_t result = countAboveLimit(x, limit, count);
+    assert(result == 4);
+
+    printf("passed.\n");
+}
 
 int main(void) {
     printf("-- HW3 --\n");
     q2a();
     q2b();
     q2c();
+    q2d();
 }
