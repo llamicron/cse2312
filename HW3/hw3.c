@@ -79,10 +79,35 @@ void q2d() {
     printf("passed.\n");
 }
 
+
+// Question 2e
+extern void leftString(char* strOut, const char* strIn, uint32_t length);
+// Extracts [length] chars from strIn (from the left) and puts them in strOut. 
+// This function is pretty useless, not sure why we're implementing it.
+// Example
+//      'abcdef', length 5 -> 'abcde'
+//      'abcdef', length 7 -> 'abcdef'
+void q2e() {
+    printf("2e) testing leftString\t\t");
+
+    char* str = "beastly";
+    // There needs to be enough space
+    char* buffer = malloc(255);
+
+    leftString(buffer, str, 5);
+    assert(strcmp(buffer, "beast") == 0);
+    leftString(buffer, str, 20);
+    assert(strcmp(buffer, str) == 0);
+
+    printf("passed.\n");
+}
+
+
 int main(void) {
     printf("-- HW3 --\n");
     q2a();
     q2b();
     q2c();
     q2d();
+    q2e();
 }

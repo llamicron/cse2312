@@ -2,6 +2,7 @@
 .global strConcatenate
 .global sumS32
 .global countAboveLimit
+.global leftString
 
 
 .text
@@ -117,3 +118,20 @@ countAboveLimit_loop:
 countAboveLimit_end:            @ Otherwise return
     POP {R4}
     BX LR
+
+
+
+@ Question 2e -------------------------------------------------------
+@ void leftString(char* strOut, const char* strIn, uint32_t length);
+@ R0 = strOut
+@ R1 = strIn
+@ R2 = length
+leftString:
+    CMP R2, #0              @ See if we've reached the limit
+    BXEQ LR                 @ If so then end  
+
+    LDRSB R3, [R1], #1      @ Load a char from strIn
+    STRB  R3, [R0], #1      @ Store in at the same index in strOut
+    
+    SUB R2, R2, #1          @ Subtract 1 from the count
+    B leftString            @ Repeat the loop
