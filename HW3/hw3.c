@@ -7,7 +7,7 @@
 
 // Question 2a
 extern bool isStrEqual(const char str1[], const char str2[]);
-int q2a() {
+void q2a() {
     printf("2a) testing isStrEqual ... \t");
 
     char str1[] = "something";
@@ -24,8 +24,8 @@ int q2a() {
 }
 
 // Question 2b
-extern char* strConcatenate(char strTo[], const char strFrom[]);
-int q2b() {
+extern void strConcatenate(char strTo[], const char strFrom[]);
+void q2b() {
     // char str1[4] = "abc";
     // char str2[] = "whatever";
     // char* result = strConcatenate(str1, str2);
@@ -52,11 +52,21 @@ int q2b() {
     printf("passed.\n");
 }
 
-
+// Question 2c
+extern int32_t sumS32(const int32_t x[], uint32_t count);
+void q2c() {
+    printf("2c) testing sumS32 ... \t\t");
+    uint32_t length = 5;
+    int32_t nums[] = {10, 20, 30, 40, 50};
+    int32_t sum = sumS32(nums, length);
+    assert(sum == 150);
+    printf("passed.\n");
+}
 
 
 int main(void) {
     printf("-- HW3 --\n");
     q2a();
     q2b();
+    q2c();
 }

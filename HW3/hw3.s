@@ -1,5 +1,6 @@
 .global isStrEqual
 .global strConcatenate
+.global sumS32
 
 
 .text
@@ -67,3 +68,22 @@ strConcatenate_loop2:
     CMP R3, #0                  @ until we reach the end
     BNE strConcatenate_loop2
     BX LR
+
+
+@ Question 2c -----------------------------
+@ int32_t sumS32(const int32_t x[], uint32_t count);
+@ R0 = sum
+@ R1 = count
+@ R2 = x[0]
+@ R3 = Loaded num
+sumS32:
+    MOV R2, R0              @ Move x[0] into R2
+    MOV R0, #0              @ move 0 into R0 (sum)
+sumS32_loop:
+    LDRSB R3, [R2]          @ load x[i] into R3
+    ADD R0, R0, R3          @ add R3 to the sum (R0)
+    ADD R2, #4              @ Add 4 to x to increment to the next one
+    SUB R1, R1, #1          @ Subtract 1 from the remaining count
+    CMP R1, #0              @ check if there's any more
+    BNE sumS32_loop         @ if so, loop again
+    BX LR                   @ otherwise return
