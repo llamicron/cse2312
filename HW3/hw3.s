@@ -4,7 +4,7 @@
 .global countAboveLimit
 .global leftString
 .global find2ndMatch
-
+.global hexStringToUint8
 
 .text
 
@@ -138,45 +138,51 @@ leftString:
     B leftString            @ Repeat the loop
 
 
-@ int32_t find2ndMatch(const char strIn[], const char strMatch[]);
-@ R0 = index (result)
-@ R1 = needle
-@ R2 = haystack
-@ R3 = needle char
-@ R4 = haystack char
-@ R5 = running match
 
-@ This doesn't work right now :(
 
-@ find2ndMatch:
-@     PUSH {R4-R5}
-@     MOV R2, R0              @ Move strIn to R2
-@     MOV R0, #0              @ Move 0 into R0 (index)
-@     MOV R5, #0
-@ findFirstOccurance:
+@ Question 2i ---------------------------------
+@ uint8_t hexStringToUint8(const char * str);
+@ R0 = sum
+@ R1 = str
+@ max u8 value -> 255
+@ highest hex value in 2 characters -> FF -> 255
+@ We can only use the first two chars and it won't be too big
+hexStringToUint8:
+    MOV R1, R0
+    MOV R0, #0
 
-@     LDRSB R3, [R1]          @ Load needle char
-@     LDRSB R4, [R2]          @ load haystack char
+    LDRSB R2, [R1], #1
+    LDRSB R3, [R1]
 
-@     CMP R4, #0              @ Have we reached the end of the haystack?
-@     MOVEQ R0, #-1           @ if so, return -1
-@     BEQ find2ndMatch_end
+second_char:
+    @ Second Char (right char)
+    @ 0-9
+    SUB R3, #48             @ 48 = ascii '0', subtract 48, now 0 = '0', 1 = '1', etc.
+    CMP R3, #10             @ Make sure it's a digit
+    ADDMI R0, R3            @ If it's 0-9, add it
+    BMI first_char          @ We want to branch here, otherwise a digit will trip
+                            @ the check below and be added again
+    
+    @ A-F
+    SUBPL R3, #7            @ There are misc chars between '9' and 'A' (65), subtract 7
+    CMP R3, #17             @ Compare to 17, we only want 10-17 (already checked for 0-9 above)
+    ADDMI R0, R3            @ Add it if its in range
 
-@     CMP R3, #0              @ have we reached the end of the needle?
-@     BEQ findSecondOccurance
+first_char:
+    @ First Char (left char)
+    @ 0-9
+    SUB R2, #48             @ 48 = ascii '0', subtract 48, now 0 = '0', 1 = '1', etc.
+    CMP R2, #10             @ Make sure it's a digit
+    MOVMI R2, R2, LSL #4
+    ADDMI R0, R2            @ If it's 0-9, add it (*16)
+    BMI hexStringToUint8_end
 
-@     CMP R3, R4
-@     ADD R5, R5, #1
+    @ A-F
+    SUBPL R2, #7            @ There are misc chars between '9' and 'A' (65), subtract 7
+    CMP R2, #17             @ Compare to 17, we only want 10-17 (already checked for 0-9 above)
+    MOVMI R2, R2, LSL #4
+    ADDMI R0, R2            @ Add it if its in range (*16)
 
-@     @ increment
-@     ADD R1, R1, #1        @ Only increment the needle if there's a match
-@     ADD R2, R2, #1        @ Always increment the haystack
-@     B findFirstOccurance
+hexStringToUint8_end:
+    BX LR
 
-@ findSecondOccurance:
-@     @ Now R5 is at the first char that doesn't match between the strings
-@     MOV R0, R5
-
-@ find2ndMatch_end:
-@     POP {R4-R5}
-@     BX LR

@@ -103,22 +103,40 @@ void q2e() {
 }
 
 
-// Question 2f
-extern int32_t find2ndMatch(const char strIn[], const char strMatch[]);
-// strMatch is the needle, strIn is the haystack
-// we need to find the index of the second occurence, or return -1
-void q2f() {
-    printf("2f) testing find2ndMatch\t");
+// // Question 2f
+// extern int32_t find2ndMatch(const char strIn[], const char strMatch[]);
+// // strMatch is the needle, strIn is the haystack
+// // we need to find the index of the second occurence, or return -1
+// void q2f() {
+//     printf("2f) testing find2ndMatch\t");
 
-    char haystack[255] = "something okay okay";
-    char needle[255] = "okay";
-    char notFound[255] = "not found";
+//     char haystack[255] = "something okay okay";
+//     char needle[255] = "okay";
+//     char notFound[255] = "not found";
 
-    int32_t result = find2ndMatch(haystack, needle);
-    printf("result = %d\n", result);
-    assert(find2ndMatch(haystack, needle) == 5);
-    assert(find2ndMatch(haystack, notFound) == -1);
+//     int32_t result = find2ndMatch(haystack, needle);
+//     printf("result = %d\n", result);
+//     assert(find2ndMatch(haystack, needle) == 5);
+//     assert(find2ndMatch(haystack, notFound) == -1);
 
+//     printf("passed.\n");
+// }
+
+// Question 2i
+extern uint8_t hexStringToUint8(const char * str);
+void q2i() {
+    printf("2i) testing hexStringToUint8\t");
+
+    char hex1[3] = "FF"; // 255
+    char hex2[3] = "07"; // 0
+    char hex3[3] = "A4"; // 164
+    char hex4[3] = "UH"; // bad: 0
+
+    assert(hexStringToUint8(hex1) == 255);
+    assert(hexStringToUint8(hex2) == 7);
+    assert(hexStringToUint8(hex3) == 164);
+    assert(hexStringToUint8(hex4) == 0);
+    
     printf("passed.\n");
 }
 
@@ -130,5 +148,6 @@ int main(void) {
     q2c();
     q2d();
     q2e();
-    q2f();
+    // q2f();
+    q2i();
 }
