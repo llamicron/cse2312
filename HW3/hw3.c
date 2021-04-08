@@ -103,24 +103,38 @@ void q2e() {
 }
 
 
-// // Question 2f
-// extern int32_t find2ndMatch(const char strIn[], const char strMatch[]);
-// // strMatch is the needle, strIn is the haystack
-// // we need to find the index of the second occurence, or return -1
-// void q2f() {
-//     printf("2f) testing find2ndMatch\t\t");
+bool is_sorted(uint32_t x[], uint32_t count) {
+    int i;
+    for (i = 0; i < count - 1; i++) {
+        if (x[i + 1] < x[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
-//     char haystack[255] = "something okay okay";
-//     char needle[255] = "okay";
-//     char notFound[255] = "not found";
 
-//     int32_t result = find2ndMatch(haystack, needle);
-//     printf("result = %d\n", result);
-//     assert(find2ndMatch(haystack, needle) == 5);
-//     assert(find2ndMatch(haystack, notFound) == -1);
+// Question 2g
+extern uint32_t sortAscendingInPlace(uint32_t x[], uint32_t count);
+void q2g() {
+    printf("2g) testing sortAscendingInPlace\t");
 
-//     printf("passed.\n");
-// }
+    uint32_t sorted[5] = {1, 2, 3, 4, 5};
+    uint32_t not_sorted[5] = {5, 4, 3, 2, 1};
+
+    assert(is_sorted(sorted, 5));
+    assert(!is_sorted(not_sorted, 5));
+
+    sortAscendingInPlace(not_sorted, 5);
+    // int i;
+    // printf("arr = [%d", not_sorted[0]);
+    // for (i = 1; i < 5; i++)
+    //     printf(", %d", not_sorted[i]);
+    // printf("]\n");
+    assert(is_sorted(not_sorted, 5));
+
+    printf("passed.\n");
+}
 
 
 // Question 2h
@@ -132,7 +146,7 @@ void q2h() {
     char str2[5] = "4390";
     char str3[5] = "-150";
     char str4[2] = "0";
-    
+
     assert(decimalStringToInt16(str1) == 37);
     assert(decimalStringToInt16(str2) == 4390);
     assert(decimalStringToInt16(str3) == -150);
@@ -170,6 +184,7 @@ int main(void) {
     q2d();
     q2e();
     // q2f();
+    q2g();
     q2h();
     q2i();
 }

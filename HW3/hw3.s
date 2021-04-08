@@ -4,6 +4,7 @@
 .global countAboveLimit
 .global leftString
 .global find2ndMatch
+.global sortAscendingInPlace
 .global hexStringToUint8
 .global decimalStringToInt16
 
@@ -137,6 +138,60 @@ leftString:
     
     SUB R2, R2, #1          @ Subtract 1 from the count
     B leftString            @ Repeat the loop
+
+
+
+@ Question 2g --------------------------------------------
+@ void sortAscendingInPlace(uint32_t x[], uint32_t count);
+@ R0 = x[0]
+@ R1 = count
+@ R2 = index
+@ R3 = loaded num
+@ R4 = loaded num 2
+@ R5 = changes?
+sortAscendingInPlace:
+    PUSH {R4-R5}
+    MOV R2, #0
+    MOV R5, #0
+    MOV R1, R1, LSL #2          @ Multiply count by 4 (size of uint32_t)
+
+sort_loop:                      @ tries to sort the list
+    LDRB R3, [R0, R2]           @ Get x[i] -> R3
+
+    ADD R2, R2, #4              @ Add sizeof(32 bit int) ie. i++
+
+    CMP R2, R1                  @ Check if we're at the end 
+    BPL sort_check              @ If we've gone past the end, go to the check
+
+    LDRB R4, [R0, R2]           @ Otherwise, get x[i + 1] -> R4
+
+    CMP R3, R4                  @ Compare nums
+    BMI sort_loop               @ If R3 < R4, go to the next pair
+    BEQ sort_loop               @ Same if they're equal
+    STRB R3, [R0, R2]           @ Otherwise, R3 > R4. store R3 -> x[i + 1]
+    SUB R2, R2, #4              @ Move back
+    STRB R4, [R0, R2]           @ Store R4 -> x[i]
+    ADD R2, R2, #4              @ Move back back
+    ADD R5, R5, #1              @ Change counter ++
+
+    CMP R2, R1                  @ Check if we're at the end 
+    BEQ sort_check              @ If so, check
+    B sort_loop                 @ If not, go to the next pair
+
+sort_check:
+    CMP R5, #0                  @ If there's no changes, it's sorted
+    BEQ sort_end                @ End
+    
+    MOV R5, #0                @ Reset the change counter
+    MOV R2, #0                @ Reset the index
+    B sort_loop               @ sort again
+    
+sort_end:
+    POP {R4-R5}
+    BX LR
+
+
+
 
 
 @ Question 2h ---------------------------------
