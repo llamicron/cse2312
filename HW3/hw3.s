@@ -3,6 +3,7 @@
 .global sumS32
 .global countAboveLimit
 .global leftString
+.global find2ndMatch
 
 
 .text
@@ -36,7 +37,7 @@ isStrEqual_loop:
     CMP R4, #0          @ If R4 = '\0', end
     BEQ isStrEqual_end
 
-    @ If they're equal, go to the next interation
+    @ If they're equal, go to the next iteration
     ADD R3, R3, #1
     B isStrEqual_loop
 isStrEqual_end:
@@ -135,3 +136,47 @@ leftString:
     
     SUB R2, R2, #1          @ Subtract 1 from the count
     B leftString            @ Repeat the loop
+
+
+@ int32_t find2ndMatch(const char strIn[], const char strMatch[]);
+@ R0 = index (result)
+@ R1 = needle
+@ R2 = haystack
+@ R3 = needle char
+@ R4 = haystack char
+@ R5 = running match
+
+@ This doesn't work right now :(
+
+@ find2ndMatch:
+@     PUSH {R4-R5}
+@     MOV R2, R0              @ Move strIn to R2
+@     MOV R0, #0              @ Move 0 into R0 (index)
+@     MOV R5, #0
+@ findFirstOccurance:
+
+@     LDRSB R3, [R1]          @ Load needle char
+@     LDRSB R4, [R2]          @ load haystack char
+
+@     CMP R4, #0              @ Have we reached the end of the haystack?
+@     MOVEQ R0, #-1           @ if so, return -1
+@     BEQ find2ndMatch_end
+
+@     CMP R3, #0              @ have we reached the end of the needle?
+@     BEQ findSecondOccurance
+
+@     CMP R3, R4
+@     ADD R5, R5, #1
+
+@     @ increment
+@     ADD R1, R1, #1        @ Only increment the needle if there's a match
+@     ADD R2, R2, #1        @ Always increment the haystack
+@     B findFirstOccurance
+
+@ findSecondOccurance:
+@     @ Now R5 is at the first char that doesn't match between the strings
+@     MOV R0, R5
+
+@ find2ndMatch_end:
+@     POP {R4-R5}
+@     BX LR

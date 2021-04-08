@@ -103,6 +103,26 @@ void q2e() {
 }
 
 
+// Question 2f
+extern int32_t find2ndMatch(const char strIn[], const char strMatch[]);
+// strMatch is the needle, strIn is the haystack
+// we need to find the index of the second occurence, or return -1
+void q2f() {
+    printf("2f) testing find2ndMatch\t");
+
+    char haystack[255] = "something okay okay";
+    char needle[255] = "okay";
+    char notFound[255] = "not found";
+
+    int32_t result = find2ndMatch(haystack, needle);
+    printf("result = %d\n", result);
+    assert(find2ndMatch(haystack, needle) == 5);
+    assert(find2ndMatch(haystack, notFound) == -1);
+
+    printf("passed.\n");
+}
+
+
 int main(void) {
     printf("-- HW3 --\n");
     q2a();
@@ -110,4 +130,5 @@ int main(void) {
     q2c();
     q2d();
     q2e();
+    q2f();
 }
