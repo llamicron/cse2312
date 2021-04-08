@@ -8,7 +8,7 @@
 // Question 2a
 extern bool isStrEqual(const char str1[], const char str2[]);
 void q2a() {
-    printf("2a) testing isStrEqual\t\t");
+    printf("2a) testing isStrEqual\t\t\t");
 
     char str1[] = "something";
     char str2[] = "something";
@@ -30,7 +30,7 @@ void q2b() {
     // char str2[] = "whatever";
     // char* result = strConcatenate(str1, str2);
     // printf("result = %s\n", result);
-    printf("2b) testing strConcatenate\t");
+    printf("2b) testing strConcatenate\t\t");
 
     char str1[13] = "first ";
     char str2[] = "second";
@@ -55,7 +55,7 @@ void q2b() {
 // Question 2c
 extern int32_t sumS32(const int32_t x[], uint32_t count);
 void q2c() {
-    printf("2c) testing sumS32\t\t");
+    printf("2c) testing sumS32\t\t\t");
     uint32_t length = 5;
     int32_t nums[] = {10, 20, 30, 40, 50};
     int32_t sum = sumS32(nums, length);
@@ -67,7 +67,7 @@ void q2c() {
 extern uint32_t countAboveLimit(const int32_t x[], int32_t limit, uint32_t count);
 // Returns the number of values in the array containing count entires that are > limit
 void q2d() {
-    printf("2d) testing countAboveLimit\t");
+    printf("2d) testing countAboveLimit\t\t");
 
     int32_t x[] = {10, 15, 20, 25, 30, 60, 5};
     int32_t limit = 17;
@@ -88,7 +88,7 @@ extern void leftString(char* strOut, const char* strIn, uint32_t length);
 //      'abcdef', length 5 -> 'abcde'
 //      'abcdef', length 7 -> 'abcdef'
 void q2e() {
-    printf("2e) testing leftString\t\t");
+    printf("2e) testing leftString\t\t\t");
 
     char* str = "beastly";
     // There needs to be enough space
@@ -108,7 +108,7 @@ void q2e() {
 // // strMatch is the needle, strIn is the haystack
 // // we need to find the index of the second occurence, or return -1
 // void q2f() {
-//     printf("2f) testing find2ndMatch\t");
+//     printf("2f) testing find2ndMatch\t\t");
 
 //     char haystack[255] = "something okay okay";
 //     char needle[255] = "okay";
@@ -122,10 +122,30 @@ void q2e() {
 //     printf("passed.\n");
 // }
 
+
+// Question 2h
+extern int16_t decimalStringToInt16(const char * str);
+void q2h() {
+    printf("2h) testing decimalStringToInt16\t");
+
+    char str1[3] = "37";
+    char str2[5] = "4390";
+    char str3[5] = "-150";
+    char str4[2] = "0";
+    
+    assert(decimalStringToInt16(str1) == 37);
+    assert(decimalStringToInt16(str2) == 4390);
+    assert(decimalStringToInt16(str3) == -150);
+    assert(decimalStringToInt16(str4) == 0);
+
+    printf("passed.\n");
+}
+
+
 // Question 2i
 extern uint8_t hexStringToUint8(const char * str);
 void q2i() {
-    printf("2i) testing hexStringToUint8\t");
+    printf("2i) testing hexStringToUint8\t\t");
 
     char hex1[3] = "FF"; // 255
     char hex2[3] = "07"; // 0
@@ -141,6 +161,7 @@ void q2i() {
 }
 
 
+
 int main(void) {
     printf("-- HW3 --\n");
     q2a();
@@ -149,5 +170,6 @@ int main(void) {
     q2d();
     q2e();
     // q2f();
+    q2h();
     q2i();
 }

@@ -5,6 +5,8 @@
 .global leftString
 .global find2ndMatch
 .global hexStringToUint8
+.global decimalStringToInt16
+
 
 .text
 
@@ -103,7 +105,6 @@ sumS32_loop:
 @ R2 = count (array length) * 4
 @ R3 = x[0]
 @ R4 = loaded x[i] value
-@ I am a genius
 countAboveLimit:
     PUSH {R4}
     MOV R3, R0                  @ Move x[0] into R3
@@ -138,6 +139,62 @@ leftString:
     B leftString            @ Repeat the loop
 
 
+@ Question 2h ---------------------------------
+@ int16_t decimalStringToInt16(const char * str) 
+@ R0 = return value
+@ R1 = str
+@ R2 = loaded char
+@ R3 = factor
+@ R4 = 10 (this needs a register for some reason for MUL)
+@ R5 = strlen
+@ I am a genius
+decimalStringToInt16:
+    PUSH {R4-R5}                @ Prepare our registers
+    MOV R1, R0
+    MOV R0, #0
+    MOV R3, #1
+    MOV R4, #10
+    MOV R5, #0
+
+decimalStringToInt16_strlen:        @ This reads the length of the str into R5
+    LDRSB R2, [R1, R5]              @ So we can read form right to left
+    CMP R2, #0
+    ADDNE R5, R5, #1
+    BNE decimalStringToInt16_strlen
+
+decimalStringToInt16_loop:
+    SUB R5, R5, #1                  @ Subtract 1 from the strlen since it was pointing at null
+
+    LDRSB R2, [R1, R5]              @ Load the char (right to left)
+
+    CMP R2, #'-'                    @ First off, if it's a dash then negate the number and quit
+    BEQ decimalStringToInt16_negate @ Nothing can come after the -
+
+    CMP R2, #0                      @ If we're at the end of the str
+    BEQ decimalStringToInt16_end    @ Return
+
+    SUB R2, R2, #48                 @ Subtract 48 because ASCII exists
+    CMP R2, #10                     @ Compare with 10
+    BPL decimalStringToInt16_loop   @ If it's higher than 10, iterate again
+    CMP R2, #0                      @ Compare with 0
+    BMI decimalStringToInt16_loop   @ If it's lower than 0, iterate again
+
+    MUL R2, R2, R3                  @ Multiply our number by it's place value factor, 10^(R3)
+    ADD R0, R0, R2                  @ Add to R0
+
+    MUL R3, R3, R4                  @ Update place value factor 
+    B decimalStringToInt16_loop     @ iterate again
+
+decimalStringToInt16_negate:        @ Negates R0 then returns
+    MVN R0, R0
+    ADD R0, R0, #1
+    B decimalStringToInt16_end
+
+decimalStringToInt16_end:
+    POP {R4-R5}
+    BX LR
+
+
 
 
 @ Question 2i ---------------------------------
@@ -154,21 +211,21 @@ hexStringToUint8:
     LDRSB R2, [R1], #1
     LDRSB R3, [R1]
 
-second_char:
+hexStringToUint8second_char:
     @ Second Char (right char)
     @ 0-9
-    SUB R3, #48             @ 48 = ascii '0', subtract 48, now 0 = '0', 1 = '1', etc.
-    CMP R3, #10             @ Make sure it's a digit
-    ADDMI R0, R3            @ If it's 0-9, add it
-    BMI first_char          @ We want to branch here, otherwise a digit will trip
-                            @ the check below and be added again
+    SUB R3, #48                         @ 48 = ascii '0', subtract 48, now 0 = '0', 1 = '1', etc.
+    CMP R3, #10                         @ Make sure it's a digit
+    ADDMI R0, R3                        @ If it's 0-9, add it
+    BMI hexStringToUint8first_char      @ We want to branch here, otherwise a digit will trip
+                                        @ the check below and be added again
     
     @ A-F
     SUBPL R3, #7            @ There are misc chars between '9' and 'A' (65), subtract 7
     CMP R3, #17             @ Compare to 17, we only want 10-17 (already checked for 0-9 above)
     ADDMI R0, R3            @ Add it if its in range
 
-first_char:
+hexStringToUint8first_char:
     @ First Char (left char)
     @ 0-9
     SUB R2, #48             @ 48 = ascii '0', subtract 48, now 0 = '0', 1 = '1', etc.
