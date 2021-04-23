@@ -29,7 +29,7 @@ int main()
     char str[53];
     double x[COUNT] = {1, -1, 2, -2, -0.640625};
     printf("Float value           Hex                 S  E     F\n");
-    for (int i = 0; i < COUNT; i++)
+    for (i = 0; i < COUNT; i++)
     {
         value = *((uint64_t*)&x[i]);
         s = value >> 63;
