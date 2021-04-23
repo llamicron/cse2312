@@ -58,7 +58,32 @@ prodF64_end:
 
 @ Returns the dot product of two arrays (x and y) containing (count) entries
 @ double dotpF64(const double x[], const double y[], uint32_t count);
+@ D0 = return value
+@ D1 = x[i]
+@ D2 = y[i]
+@ R0 = x[0]
+@ R1 = y[0]
+@ R2 = count
 dotpF64:
+    MOV R3, #0              @ Load a 0
+    VMOV D0, R3, R3         @ Store a 0 into D0
+dotpF64_loop:
+    CMP R2, #0              @ Compare count to 0
+    BEQ dotpF64_end         @ If it's 0, we're done
+
+    VLDR D1, [R0]           @ Load x[i] into D1
+    VLDR D2, [R1]           @ Load y[i] into D2
+
+    VMUL.F64 D1, D1, D2     @ Multiply both and store in D1
+    VADD.F64 D0, D0, D1     @ Add D1 to D0
+
+    ADD R0, R0, #8          @ Increment both
+    ADD R1, R1, #8
+
+    SUB R2, R2, #1          @ Decrement count
+
+    B dotpF64_loop          @ Loop again
+dotpF64_end:
     BX LR
 
 @ Returns the maximum value in the array (x) containing (count) entries
