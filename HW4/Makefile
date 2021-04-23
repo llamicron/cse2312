@@ -3,4 +3,4 @@ run: build
 
 
 build:
-	gcc -o hw4 hw4.c hw4.s
+	gcc -o hw4 hw4.c hw4.s -g

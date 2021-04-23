@@ -33,6 +33,12 @@ void test_sumF32() {
 void test_prodF64() {
     printf("Testing prodF64\t\t");
 
+    double x[COUNT] = {1.1, 2.2, 3.3, 4.4, 5.5};
+    double product = prodF64(x, COUNT);
+    test((product - 193.261200) < 0.000001) {
+        printf("product = %f\n", product);
+    };
+
     printf("passed.\n");
 }
 

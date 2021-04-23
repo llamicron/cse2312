@@ -31,9 +31,29 @@ sumF32_loop:
 sumF32_end:
     BX LR
 
+
+
+
 @ Returns the product of the elements in an array (x) containing (count) entries
 @ double prodF64(const double x[], uint32_t count);
 prodF64:
+    CMP R1, #0
+    BEQ prodF64_end     @ If there aren't any values, end
+
+    VLDR D0, [R0]       @ otherwise, load the first value so we're not multiplying by 0
+    SUB R1, R1, #1      @ Decrement count
+    ADD R0, R0, #8      @ Increment index
+prodF64_loop:
+    CMP R1, #0          @ Is the count 0?
+    BEQ prodF64_end     @ If so then end
+
+    VLDR D1, [R0]       @ read next value in array
+    ADD R0, R0, #8      @ Increment by size of double (8 bytes)
+    VMUL.F64 D0, D0, D1 @ Vector add D1 to D0
+    SUB R1, R1, #1      @ Subtract count
+
+    B prodF64_loop
+prodF64_end:
     BX LR
 
 @ Returns the dot product of two arrays (x and y) containing (count) entries
@@ -44,26 +64,4 @@ dotpF64:
 @ Returns the maximum value in the array (x) containing (count) entries
 @ float maxF32(const float x[], uint32_t count);
 maxF32:
-    BX LR
-
-
-
-// double sumF64(const double x[], uint32_t count);
-sumF64:
-    MOV R2, #0          @ this gets us 32 bits of 0
-    VMOV D0, R2, R2     @ This gets us 64 bits of 0
-sumF64_loop:
-    CMP R1, #0          @ Is the count 0?
-    BEQ sumF64_end
-
-    VLDR D1, [R0]       @ read next value in array
-    ADD R0, R0, #8      @ Increment by size of double (8 bytes)
-    VADD.F64 D0, D0, D1 @ Vector add D1 to D0
-    SUB R1, R1, #1      @ Subtract count
-
-    @ D0 could store a double, int64_t or uint64_t, so we add the .F64 or .F32
-    @ so it knows what it's operating on
-
-    B sumF64_loop
-sumF64_end:
     BX LR
