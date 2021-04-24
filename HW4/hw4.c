@@ -52,7 +52,7 @@ void test_dotpF64() {
     double y[COUNT] = {6, 7, 8, 9, 10};
 
     double dotp = dotpF64(x, y, COUNT);
-    
+
     test(abs(dotp - 130.00) < 0.000001) {
         printf("dotp = %f\n", dotp);
     }
@@ -63,6 +63,13 @@ void test_dotpF64() {
 // extern float maxF32(const float x[], uint32_t count);
 void test_maxF32() {
     printf("Testing maxF32\t\t");
+
+    float x[COUNT] = {1.0, 3.0, 5.0, 4.0, 2.0};
+    float max = maxF32(x, COUNT);
+
+    test(abs(max - 5.0) < 0.000001) {
+        printf("max = %f\n", max);
+    }
 
     printf("passed.\n");
 }

@@ -5,7 +5,6 @@
 .global dotpF64
 .global maxF32
 
-
 .text
 
 
@@ -88,5 +87,26 @@ dotpF64_end:
 
 @ Returns the maximum value in the array (x) containing (count) entries
 @ float maxF32(const float x[], uint32_t count);
+@ R0 = x[0]
+@ R1 = count
+@ S0 = max
+@ S1 = current
 maxF32:
+    CMP R1, #0              @ If the count is 0, quit
+    BEQ maxF32_end
+    VLDR S0, [R0]           @ Load x[0] in S0
+maxF32_loop:
+    CMP R1, #0              @ If the count is 0, quit
+    BEQ maxF32_end
+
+    VLDR S1, [R0]           @ Load x[i] in S1
+    VCMP.F32 S0, S1         @ Compare S0 - S1
+    VMRS APSR_nzcv, FPSCR   @ I have no idea why this is necessary but it is
+    VMOVMI S0, S1           @ If S0 is smaller, move S1 into S0
+
+    SUB R1, R1, #1          @ Decrement count
+    ADD R0, R0, #4          @ Increment R0
+
+    B maxF32_loop
+maxF32_end:
     BX LR
