@@ -1,5 +1,8 @@
-.global sumF64
-
+@ Luke Sweeney
+@ 1001764631
+@ April 23, 2021
+@ CSE 2312 - Losh
+@ Homework 4
 .global sumF32
 .global prodF64
 .global dotpF64
