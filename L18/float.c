@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define COUNT 9
+#define COUNT 5
 
 void uint32ToBinaryString(char str[], uint32_t x) {
     uint32_t index;
@@ -29,7 +29,7 @@ int main() {
     uint32_t f;
     char str[24];
 
-    float x[COUNT] = {1, -1, 2, -2, -0.640625, 0.3333333333, 1024, 1024 + 1/8192.0, 1024 + 1/16384.0};
+    float x[COUNT] = {0.125, -15.5625, 0.3333333333, 251.2578125, 2048.0000001};
 
     printf("Float Value\t\t\tHex\t\tS\tE\tF\n");
     for (i = 0; i < COUNT; i++)
